@@ -1,9 +1,8 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { UserGatewayInterface } from './user-gateway-interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../entities/user.entity';
-import { UserModel } from '../entities/user.model';
 import * as bcrypt from 'bcrypt';
+import { User, UserModel } from '../entities';
 
 @Injectable()
 export class UserGatewayMongo implements UserGatewayInterface {
@@ -28,12 +27,18 @@ export class UserGatewayMongo implements UserGatewayInterface {
   }
 
   async create(user: User): Promise<User> {
+    const existUser = await this.getUserByEmail(user.email);
+
+    if (existUser) {
+      throw new HttpException('Email já cadastrado', 400);
+    }
+
     user.password = await this.hasPassword(user.password);
 
     return this.userModel.create(user);
   }
 
-  async delete(id: string): Promise<HttpException> {
+  async delete(id: string): Promise<string> {
     const user = await this.userModel.findById(id);
 
     if (!user) {
@@ -41,11 +46,21 @@ export class UserGatewayMongo implements UserGatewayInterface {
     }
 
     await this.userModel.findByIdAndDelete(user.id);
-    return new HttpException('Usuário deletado com sucesso', 200);
+    return 'Usuário deletado com sucesso';
   }
 
   private async hasPassword(password: string): Promise<string> {
     const salRounds = 10;
     return await bcrypt.hash(password, salRounds);
+  }
+
+  private async getUserByEmail(email: string) {
+    const user = await this.userModel.findOne({ email });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
   }
 }

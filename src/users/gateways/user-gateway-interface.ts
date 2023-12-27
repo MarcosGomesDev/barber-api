@@ -1,4 +1,4 @@
-import { User } from '../entities/user.entity';
+import { User } from '../entities';
 
 export interface UserGatewayInterface {
   create(user: User): Promise<User>;

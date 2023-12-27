@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { UserGatewayInterface } from './gateways/user-gateway-interface';
-import { CreateUserDTO } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
+import { CreateUserDTO } from './dto';
+import { User } from './entities';
+import { UserGatewayInterface } from './gateways';
 
 @Injectable()
 export class UserService {
