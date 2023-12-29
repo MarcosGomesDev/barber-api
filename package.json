@@ -27,6 +27,7 @@
     "@nestjs/mongoose": "^10.0.2",
     "@nestjs/platform-express": "^10.0.0",
     "bcrypt": "^5.1.1",
+    "module-alias": "^2.2.3",
     "mongoose": "^8.0.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
@@ -61,7 +62,12 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "moduleNameMapper": {
+      "^@app/(.*)$": "<rootDir>/src/$1",
+      "^@test/(.*)$": "<rootDir>/test/$1",
+      "^@mocks/(.*)$": "<rootDir>/mocks/$1"
+    },
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -71,5 +77,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "_moduleAliases": {
+    "@users": "./src/users"
   }
 }
