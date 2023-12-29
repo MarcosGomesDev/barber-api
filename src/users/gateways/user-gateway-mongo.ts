@@ -27,7 +27,7 @@ export class UserGatewayMongo implements UserGatewayInterface {
   }
 
   async create(user: User): Promise<User> {
-    const existUser = await this.getUserByEmail(user.email);
+    const existUser = await this.findByEmail(user.email);
 
     if (existUser) {
       throw new HttpException('Email já cadastrado', 400);
@@ -54,7 +54,7 @@ export class UserGatewayMongo implements UserGatewayInterface {
     return await bcrypt.hash(password, salRounds);
   }
 
-  private async getUserByEmail(email: string) {
+  async findByEmail(email: string): Promise<User> {
     const user = await this.userModel.findOne({ email });
 
     if (!user) {

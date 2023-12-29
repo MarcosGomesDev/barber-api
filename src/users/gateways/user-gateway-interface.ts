@@ -5,4 +5,5 @@ export interface UserGatewayInterface {
   findAll(): Promise<User[]>;
   findById(id: string): Promise<User>;
   delete(id: string): Promise<any>;
+  findByEmail(email: string): Promise<User>;
 }
