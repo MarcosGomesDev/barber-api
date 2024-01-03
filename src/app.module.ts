@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './users';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './database';
 
 @Module({
   imports: [
-    UserModule,
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DATABASE_URL, {
-      dbName: 'barber',
-      autoCreate: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
     }),
+    UserModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
